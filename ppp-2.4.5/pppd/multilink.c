@@ -258,13 +258,21 @@ static void sendhup(char *str)
 	}
 }
 
+extern int device_script(char *, int, int, int);
 void mp_bundle_terminated()
 {
 	TDB_DATA key;
 
 	bundle_terminating = 1;
 	upper_layers_down(0);
+
 	notice("Connection terminated.");
+	if(device_script("/etc/ppp/disconnect-alert.sh", 0, 0, 1)) {
+		notice("running disconnect script failed");
+	} else {
+		notice("running disconnect script succeeded\n");
+	}
+
 	print_link_stats();
 	if (!demand) {
 		remove_pidfiles();

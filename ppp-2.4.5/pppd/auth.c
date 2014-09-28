@@ -608,6 +608,7 @@ void start_link(unit)
 	(*the_channel->cleanup)();
 }
 
+extern int device_script(char *, int, int, int);
 /*
  * LCP has terminated the link; go to the Dead phase and take the
  * physical layer down.
@@ -626,10 +627,16 @@ link_terminated(unit)
     session_end(devnam);
 
     if (!doing_multilink) {
-	notice("Connection terminated.");
+	notice("Multilink connection terminated.");
 	print_link_stats();
     } else
 	notice("Link terminated.");
+
+    if(device_script("/etc/ppp/disconnect-alert.sh", 0, 0, 1)) {
+	    notice("running disconnect script failed\n");
+    } else {
+	    notice("running disconnect script succeeded\n");
+    }
 
     /*
      * Delete pid files before disestablishing ppp.  Otherwise it

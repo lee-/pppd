@@ -1,3 +1,7 @@
+// multisearch-with-subdirs-of: ".."
+// multisearch-with-files-matching: "[^\(~\#\)]$"
+
+
 /*
  * main.c - Point-to-Point Protocol main module
  *
